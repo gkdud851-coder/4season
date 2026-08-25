@@ -1,0 +1,6 @@
+{
+  "name": "사계절 주간보호센터",
+  "description": "어린이집 교사 10년 경력 대표가 손녀의 마음으로 모시는 청주 사계절 주간보호센터 웹사이트",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+:root {
+  --paper: #FDFBF7;
+  --ink: #1C1917;
+  --ink-soft: #44403C;
+  --pine: #23533D;
+  --pine-deep: #163829;
+  --spring: #DB6B88;
+  --summer: #2E8B57;
+  --autumn: #C67D15;
+  --winter: #4A82B0;
+  --line: #E5DFC9;
+  --card: #FFFFFF;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Noto Sans KR", system-ui, Roboto, sans-serif;
+  background-color: var(--paper);
+  color: var(--ink);
+  line-height: 1.8;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.font-batang {
+  font-family: 'Gowun Batang', serif;
+  font-weight: 700;
+}
+
+.font-sans-kr {
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Noto Sans KR", system-ui, Roboto, sans-serif;
+}
+
+/* Accessibility & Mobile Large Text Mode */
+body.text-large {
+  font-size: 19px;
+}
+body.text-large .text-base {
+  font-size: 1.15rem;
+}
+body.text-large .text-sm {
+  font-size: 1.05rem;
+}
+body.text-large p {
+  line-height: 1.95;
+}
+
