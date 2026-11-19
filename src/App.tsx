@@ -140,13 +140,15 @@ function ArrowUpRightIcon() {
 export default function App() {
   const [isStoryOpen, setIsStoryOpen] = useState(false);
   const [selectedMeal, setSelectedMeal] = useState<MealItem | null>(null);
+  const [isCallModalOpen, setIsCallModalOpen] = useState(false);
   const storySectionRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
-    if (!selectedMeal) return;
+    if (!selectedMeal && !isCallModalOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setSelectedMeal(null);
+        setIsCallModalOpen(false);
       }
     };
     const prevOverflow = document.body.style.overflow;
@@ -156,7 +158,7 @@ export default function App() {
       document.body.style.overflow = prevOverflow;
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [selectedMeal]);
+  }, [selectedMeal, isCallModalOpen]);
 
   const handleToggleStory = () => {
     const nextOpen = !isStoryOpen;
@@ -180,13 +182,14 @@ export default function App() {
             </span>
             <span className="font-bold text-[17px] text-[#1B3A2B]">사계절 주간보호센터</span>
           </div>
-          <a
-            href="tel:0432164120"
-            className="flex items-center gap-[6px] min-h-[44px] px-4 rounded-full bg-[#23533D] hover:bg-[#163829] text-white font-bold text-[15px] no-underline"
+          <button
+            type="button"
+            onClick={() => setIsCallModalOpen(true)}
+            className="flex items-center gap-[6px] min-h-[44px] px-4 rounded-full bg-[#23533D] hover:bg-[#163829] text-white font-sans font-bold text-[15px] border-0 cursor-pointer"
           >
             <PhoneIcon size={16} strokeWidth={2} />
             전화 상담
-          </a>
+          </button>
         </header>
 
         {/* 히어로 */}
@@ -606,15 +609,16 @@ export default function App() {
           aria-label="빠른 상담"
           className="sticky bottom-0 z-10 grid grid-cols-[1.6fr_1fr] gap-2 pt-[10px] px-3 pb-[calc(10px+env(safe-area-inset-bottom))] bg-[rgba(20,44,32,0.97)] shadow-[0_-4px_16px_rgba(0,0,0,0.18)]"
         >
-          <a
-            href="tel:0432164120"
-            className="flex items-center justify-center gap-2 min-h-[52px] rounded-[12px] bg-[#E3B04B] text-[#1B3A2B] text-[17px] font-bold no-underline"
+          <button
+            type="button"
+            onClick={() => setIsCallModalOpen(true)}
+            className="flex items-center justify-center gap-2 min-h-[52px] rounded-[12px] bg-[#E3B04B] text-[#1B3A2B] font-sans text-[17px] font-bold border-0 cursor-pointer"
           >
             <PhoneIcon size={18} strokeWidth={2.2} />
             전화 상담
-          </a>
+          </button>
           <a
-            href="sms:0432164120"
+            href="sms:01021271926"
             className="flex items-center justify-center gap-2 min-h-[52px] rounded-[12px] border-[1.5px] border-[#8FAE9C] text-white text-[16px] font-bold no-underline"
           >
             <svg
@@ -674,6 +678,82 @@ export default function App() {
                 alt="센터 점심 식단 확대 사진"
                 className={`w-full h-full object-cover block ${selectedMeal.imgClass}`}
               />
+            </div>
+          </div>
+        </div>
+      )}
+      {/* 전화 상담 번호 선택 모달 */}
+      {isCallModalOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="전화 상담 번호 선택"
+          onClick={() => setIsCallModalOpen(false)}
+          className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-5"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-[360px] rounded-[16px] bg-[#FBF8F2] border border-[#E6DFD0] p-5 shadow-2xl"
+          >
+            <div className="flex items-start justify-between gap-3 mb-4">
+              <div>
+                <p className="m-0 mb-1 text-[13px] font-bold text-[#23533D]">전화 상담</p>
+                <h2 className="m-0 font-serif text-[20px] leading-[1.35] font-bold text-[#1B3A2B]">
+                  편하신 번호로 연결해 주세요
+                </h2>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsCallModalOpen(false)}
+                aria-label="닫기"
+                className="shrink-0 w-9 h-9 rounded-full bg-[#EFEADF] text-[#1B3A2B] flex items-center justify-center border-0 cursor-pointer"
+              >
+                <svg
+                  aria-hidden="true"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M18 6 6 18M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="flex flex-col gap-2.5">
+              <a
+                href="tel:0432164120"
+                className="flex items-center justify-between gap-3 px-4 py-4 rounded-[12px] bg-[#23533D] hover:bg-[#163829] text-white no-underline"
+              >
+                <div>
+                  <span className="block text-[13px] text-[#D9E3DC]">센터 전화 (내선번호)</span>
+                  <span className="block mt-0.5 text-[21px] font-bold tracking-[0.3px] text-white">
+                    043-216-4120
+                  </span>
+                </div>
+                <span className="shrink-0 w-10 h-10 rounded-full bg-white/15 flex items-center justify-center text-white">
+                  <PhoneIcon size={18} strokeWidth={2.2} />
+                </span>
+              </a>
+
+              <a
+                href="tel:01021271926"
+                className="flex items-center justify-between gap-3 px-4 py-4 rounded-[12px] bg-white border-[1.5px] border-[#23533D] text-[#1B3A2B] hover:bg-[#F4EEE1] no-underline"
+              >
+                <div>
+                  <span className="block text-[13px] text-[#5C574B]">휴대폰 번호</span>
+                  <span className="block mt-0.5 text-[21px] font-bold tracking-[0.3px] text-[#1B3A2B]">
+                    010-2127-1926
+                  </span>
+                </div>
+                <span className="shrink-0 w-10 h-10 rounded-full bg-[#EFEADF] flex items-center justify-center text-[#23533D]">
+                  <PhoneIcon size={18} strokeWidth={2.2} />
+                </span>
+              </a>
             </div>
           </div>
         </div>
