@@ -1,91 +1,26 @@
 @import "tailwindcss";
 
-:root {
-  --paper: #FDFBF7;
-  --ink: #1C1917;
-  --ink-soft: #44403C;
-  --pine: #23533D;
-  --pine-deep: #163829;
-  --spring: #DB6B88;
-  --summer: #2E8B57;
-  --autumn: #C67D15;
-  --winter: #4A82B0;
-  --line: #E5DFC9;
-  --card: #FFFFFF;
+@theme {
+  --font-sans: "Noto Sans KR", sans-serif;
+  --font-serif: "Noto Serif KR", serif;
 }
 
-html {
-  scroll-behavior: smooth;
-  -webkit-text-size-adjust: 100%;
-}
-
-body {
-  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Noto Sans KR", system-ui, Roboto, sans-serif;
-  background-color: var(--paper);
-  color: var(--ink);
-  line-height: 1.8;
-  word-break: keep-all;
-  overflow-wrap: break-word;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-.font-batang {
-  font-family: 'Gowun Batang', serif;
-  font-weight: 700;
-}
-
-.font-sans-kr {
-  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Noto Sans KR", system-ui, Roboto, sans-serif;
-}
-
-/* Accessibility & Mobile Large Text Mode */
-body.text-large {
-  font-size: 19px;
-}
-body.text-large .text-base {
-  font-size: 1.15rem;
-}
-body.text-large .text-sm {
-  font-size: 1.05rem;
-}
-body.text-large p {
-  line-height: 1.95;
-}
-
-/* 계절 효과: 은은하게 흩날리는 사계절 꽃잎/단풍잎 */
-@keyframes floatLeaf {
-  0% {
-    transform: translateY(-20px) rotate(0deg) translateX(0px);
-    opacity: 0;
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
   }
-  15% {
-    opacity: 0.65;
+
+  body {
+    margin: 0;
+    background: #F3EFE6;
+    color: #1F2A24;
+    font-family: "Noto Sans KR", sans-serif;
+    word-break: keep-all;
   }
-  50% {
-    transform: translateY(45vh) rotate(160deg) translateX(25px);
-    opacity: 0.75;
-  }
-  85% {
-    opacity: 0.5;
-  }
-  100% {
-    transform: translateY(92vh) rotate(320deg) translateX(-15px);
-    opacity: 0;
+
+  button:focus-visible,
+  a:focus-visible {
+    outline: 3px solid #E3B04B;
+    outline-offset: 2px;
   }
 }
-
-.animate-leaf-1 {
-  animation: floatLeaf 14s ease-in-out infinite;
-}
-.animate-leaf-2 {
-  animation: floatLeaf 18s ease-in-out infinite 3s;
-}
-.animate-leaf-3 {
-  animation: floatLeaf 16s ease-in-out infinite 7s;
-}
-.animate-leaf-4 {
-  animation: floatLeaf 20s ease-in-out infinite 11s;
-}
-
-
