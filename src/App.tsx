@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 interface FacilityItem {
   src: string;
@@ -9,6 +9,11 @@ interface ActivityItem {
   src: string;
   caption: string;
   objectPositionClass: string;
+}
+
+interface MealItem {
+  src: string;
+  imgClass: string;
 }
 
 interface BlogItem {
@@ -41,15 +46,15 @@ const ACTIVITY_PHOTOS: ActivityItem[] = [
   { src: '/images/activity-10-market-outing.jpg', caption: '장터 나들이', objectPositionClass: 'object-[50%_50%]' },
 ];
 
-const MEAL_PHOTOS: string[] = [
-  '/images/meal-1.jpg',
-  '/images/meal-2.jpg',
-  '/images/meal-3.jpg',
-  '/images/meal-4.jpg',
-  '/images/meal-5.jpg',
-  '/images/meal-6.jpg',
-  '/images/meal-7.jpg',
-  '/images/meal-8.jpg',
+const MEAL_PHOTOS: MealItem[] = [
+  { src: '/images/meal-1.jpg', imgClass: 'scale-[1.13] -translate-x-[1.2%] -translate-y-[0.8%]' },
+  { src: '/images/meal-2.jpg', imgClass: 'scale-[1.12] -translate-x-[2.2%] -translate-y-[2.5%]' },
+  { src: '/images/meal-3.jpg', imgClass: 'scale-[1.06]' },
+  { src: '/images/meal-4.jpg', imgClass: 'scale-[1.13] translate-y-[0.5%]' },
+  { src: '/images/meal-5.jpg', imgClass: 'scale-[1.06] translate-x-[2%]' },
+  { src: '/images/meal-6.jpg', imgClass: 'scale-[1.07]' },
+  { src: '/images/meal-7.jpg', imgClass: 'scale-[1.06] translate-x-[1.8%]' },
+  { src: '/images/meal-8.jpg', imgClass: 'scale-[1.04] -translate-x-[1%]' },
 ];
 
 const BLOG_POSTS: BlogItem[] = [
@@ -134,7 +139,24 @@ function ArrowUpRightIcon() {
 
 export default function App() {
   const [isStoryOpen, setIsStoryOpen] = useState(false);
+  const [selectedMeal, setSelectedMeal] = useState<MealItem | null>(null);
   const storySectionRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    if (!selectedMeal) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setSelectedMeal(null);
+      }
+    };
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [selectedMeal]);
 
   const handleToggleStory = () => {
     const nextOpen = !isStoryOpen;
@@ -392,13 +414,20 @@ export default function App() {
             센터 조리실에서 밥과 국, 반찬을 매일 새로 만들어 드립니다.
           </p>
           <div className="grid grid-cols-2 gap-2">
-            {MEAL_PHOTOS.map((src) => (
-              <img
-                key={src}
-                src={src}
-                alt="센터 점심 식단"
-                className="w-full aspect-[4/3] object-cover rounded-[10px] block bg-[#E6DFD0]"
-              />
+            {MEAL_PHOTOS.map((meal, index) => (
+              <button
+                key={meal.src}
+                type="button"
+                onClick={() => setSelectedMeal(meal)}
+                aria-label={`센터 점심 식단 ${index + 1} 크게 보기`}
+                className="w-full aspect-[4/3] overflow-hidden rounded-[10px] block bg-[#E6DFD0] p-0 border-0 cursor-pointer"
+              >
+                <img
+                  src={meal.src}
+                  alt={`센터 점심 식단 ${index + 1}`}
+                  className={`w-full h-full object-cover block ${meal.imgClass}`}
+                />
+              </button>
             ))}
           </div>
         </section>
@@ -605,6 +634,50 @@ export default function App() {
           </a>
         </nav>
       </div>
+
+      {/* 식판 사진 확대 모달 */}
+      {selectedMeal && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="식단 사진 크게 보기"
+          onClick={() => setSelectedMeal(null)}
+          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-[460px]"
+          >
+            <button
+              type="button"
+              onClick={() => setSelectedMeal(null)}
+              aria-label="닫기"
+              className="absolute -top-12 right-0 w-10 h-10 rounded-full bg-white/95 text-[#1B3A2B] flex items-center justify-center border-0 cursor-pointer shadow-md"
+            >
+              <svg
+                aria-hidden="true"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M18 6 6 18M6 6l12 12" />
+              </svg>
+            </button>
+            <div className="w-full aspect-[4/3] overflow-hidden rounded-[12px] bg-[#E6DFD0] shadow-2xl">
+              <img
+                src={selectedMeal.src}
+                alt="센터 점심 식단 확대 사진"
+                className={`w-full h-full object-cover block ${selectedMeal.imgClass}`}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
